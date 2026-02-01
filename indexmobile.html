@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Be My Valentine? 🌹</title>
+    <style>
+        * { box-sizing: border-box; touch-action: none; } /* touch-action none prevents scrolling while chasing */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #ffeef2;
+            font-family: 'Segoe UI', sans-serif;
+            overflow: hidden; 
+        }
+        #container {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 85%;
+            max-width: 400px;
+            text-align: center;
+            z-index: 1;
+        }
+        h1 { color: #ff4d6d; font-size: 1.5rem; }
+        p { 
+        color: #555; 
+        font-size: 0.8rem; /* Adjusted from 1.1rem */
+        }
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        button {
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        /* Valentine Buttons */
+        .btn-main {
+            padding: 12px 28px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        #yesBtn { background-color: #ff4d6d; color: white; }
+        #noBtn {
+            background-color: #adb5bd;
+            color: white;
+            position: fixed; /* Fixed ensures it stays relative to the screen, not the box */
+            z-index: 999;    /* Makes sure it's always on top of everything */
+            left: 50%;       /* Center it initially */
+            transform: translateX(10px); /* Offset from Yes button */
+        }
+        * Gift Card Section */
+        #gift-section {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px dashed #ffcad4;
+        }
+        .gift-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .gift-btn {
+            padding: 10px;
+            border: 2px solid #ff4d6d;
+            background: transparent;
+            color: #ff4d6d;
+            border-radius: 12px;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        .gift-btn:hover { background: #ff4d6d; color: white; }
+
+        .hidden { display: none; }
+        img { max-width: 100%; border-radius: 15px; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <div id="question-page">
+        <h1>Will you be my Valentine? 🌹</h1>
+        <div class="buttons">
+            <button id="yesBtn" onclick="showLove()">Yes</button>
+            <button id="noBtn" 
+                    onmouseover="moveButton()" 
+                    ontouchstart="moveButton(event)">No</button>
+        </div>
+    </div>
+
+    <div id="success-page" class="hidden">
+        <h1>Yay! ❤️</h1>
+        <p>I'm the luckiest person in the world to have you!.</p>
+        <p>Like the lamp glowing before the deity,</p>
+        <p>your love lights my soul with endless grace.</p>
+        <p>Your my Polaris the North Star, my guiding star,</p>
+        <p>Every Valentine a sacred darshan of your heart.</p>
+        <img src="pic.jpg" alt="Cute Valentine Image">
+        <div id="gift-section">
+            <p><strong>Treat yourself, my love:</strong></p>
+            <div class="gift-grid">
+                <a href="https://www.amazon.in" target="_blank" class="gift-btn">Amazon 🛒</a>
+                <a href="https://www.flipkart.com" target="_blank" class="gift-btn">Flipkart 📦</a>
+                <a href="https://www.myntra.com" target="_blank" class="gift-btn">Myntra 👗</a>
+                <a href="https://www.nykaa.com" target="_blank" class="gift-btn">Nykaa 💄</a>
+            </div>
+        </div>
+        <p>With all my love,</p>
+        <p>Rohan ❤️</p>
+    </div>
+</div>
+
+<script>
+    function moveButton(e) {
+        if(e) e.preventDefault(); 
+        
+        const btn = document.getElementById('noBtn');
+        
+        // We use window dimensions to keep it in the "viewport"
+        const padding = 20;
+        const maxX = window.innerWidth - btn.offsetWidth - padding;
+        const maxY = window.innerHeight - btn.offsetHeight - padding;
+
+        // Generate coordinates that are definitely within the visible screen
+        const randomX = Math.floor(Math.random() * (maxX - padding) + padding);
+        const randomY = Math.floor(Math.random() * (maxY - padding) + padding);
+
+        // Apply styles
+        btn.style.left = randomX + 'px';
+        btn.style.top = randomY + 'px';
+        btn.style.transform = 'none'; // Remove the initial centering transform
+    }
+
+    function showLove() {
+        document.getElementById('question-page').style.display = 'none';
+        document.getElementById('success-page').classList.remove('hidden');
+        document.getElementById('noBtn').style.display = 'none';
+        // Confetti effect or color change
+        document.body.style.backgroundColor = "#ffdeeb";
+    }
+</script>
+
+</body>
+</html>
