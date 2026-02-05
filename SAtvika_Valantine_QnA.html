@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Love Story | 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #f5e6d3;
+            --accent: #d4af37;
+            --bg1: #1a0a0a; 
+            --bg2: #3d0a14;
+            --glass: rgba(255, 255, 255, 0.07);
+            --error: #ff4d6d;
+        }
+
+        body, html {
+            margin: 0; padding: 0; min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 100%);
+            transition: all 1.5s ease; 
+            color: var(--primary);
+            overflow-x: hidden;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+        .stage { position: relative; z-index: 10; width: 90%; max-width: 500px; }
+
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 30px;
+            text-align: center;
+            display: none;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+        }
+
+        .card.active { 
+            display: block; 
+            animation: slideIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .shake { 
+            animation: shake 0.4s ease-in-out; 
+            border: 1px solid var(--error) !important;
+            color: var(--error) !important;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .photo-frame {
+            width: 100%; height: 250px; background: rgba(0,0,0,0.2);
+            border-radius: 20px; margin-bottom: 20px;
+            overflow: hidden; border: 1px solid var(--accent);
+        }
+        .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem; margin-bottom: 15px;
+            background: linear-gradient(to right, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .heart-icon { font-size: 4rem; margin-bottom: 20px; animation: heartbeat 1.5s ease infinite; }
+        @keyframes heartbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+
+        .btn-group { display: grid; gap: 12px; margin-top: 25px; }
+        .btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 16px; border-radius: 12px;
+            color: #fff; cursor: pointer; transition: 0.3s;
+            font-size: 0.95rem;
+            position: relative;
+        }
+        .btn:hover { background: rgba(212, 175, 55, 0.1); transform: translateY(-2px); }
+
+        .progress-dots { display: flex; justify-content: center; gap: 8px; margin-top: 30px; }
+        .dot { width: 6px; height: 6px; background: rgba(255,255,255,0.2); border-radius: 50%; transition: 0.4s; }
+        .dot.active { background: var(--accent); transform: scale(1.5); }
+
+        .error-msg { color: var(--error); font-size: 0.8rem; margin-top: 10px; display: none; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+<div class="particles" id="particles"></div>
+
+<div class="stage">
+    
+    <div class="card active" id="c1">
+        <h1>An Invitation</h1>
+        <p>You are invited to verify your 2026 Valentine Status. <br>Accuracy is required to proceed.</p>
+        <div class="btn-group">
+            <button class="btn" onclick="showCard(2)">Begin Verification</button>
+        </div>
+    </div>
+
+    <div class="card" id="c2">
+        <h1>Question 01</h1>
+        <p>When was our first "official" date?</p>
+        <div class="btn-group">
+            <button class="btn" onclick="wrong(this)">March 04 2019 At Milk Shake Factory</button>
+            <button class="btn" onclick="showCard(3)">February 03 2019 At Milk Shake Factory</button>
+        </div>
+        <div class="error-msg">Hmm, that's not quite right. Try again, love!</div>
+    </div>
+
+    <div class="card" id="c3">
+        <h1>Question 02</h1>
+        <p>Which song always makes you think of me?</p>
+        <div class="btn-group">
+            <button class="btn" onclick="wrong(this)">Ok Bangaram - Nitho Alla</button>
+            <button class="btn" onclick="showCard(4)">Ok Bangram - Mental Madhilo</button>
+        </div>
+        <div class="error-msg">Nice try! Think about the lyrics again...</div>
+    </div>
+
+    <div class="card" id="c4">
+        <h1>Question 03</h1>
+        <p>What is your favorite memory of us?</p>
+        <div class="btn-group">
+            <button class="btn" onclick="showCard(5)">Meeting me at my childhood</button>
+            <button class="btn" onclick="wrong(this)">Meeting me at Mamatha College</button>
+        </div>
+        <div class="error-msg">Not that one!</div>
+    </div>
+
+    <div class="card" id="c5">
+        <h1>Question 04</h1>
+        <p>What is my "absolute favorite" meal?</p>
+        <div class="btn-group">
+            <button class="btn" onclick="showCard(6)">Uggani</button>
+            <button class="btn" onclick="wrong(this)">Atukullu</button>
+        </div>
+        <div class="error-msg">You know I prefer the other one!</div>
+    </div>
+
+    <div class="card" id="c6">
+        <h1>Question 05</h1>
+        <p>What is our "dream" travel destination?</p>
+        <div class="btn-group">
+            <button class="btn" onclick="wrong(this)">Denmark</button>
+            <button class="btn" onclick="showCard(7)">Paris / New York</button>
+        </div>
+        <div class="error-msg">Almost! But we talked about the other place...</div>
+    </div>
+
+    <div class="card" id="c7">
+        <div class="photo-frame"><img src="photo1.jpg" alt="Memory 1"></div>
+        <h1>Where was this?</h1>
+        <p>I still remember the weather that day...</p>
+        <div class="btn-group">
+            <button class="btn" onclick="wrong(this)">Narsimha Swami Temple - Khammam</button>
+            <button class="btn" onclick="showCard(8)">Rudreshwara temple - Ramappa</button>
+        </div>
+        <div class="error-msg">Close, but look at the background again!</div>
+    </div>
+
+    <div class="card" id="c8">
+        <div class="photo-frame"><img src="photo2.jpg" alt="Memory 2"></div>
+        <h1>And this place?</h1>
+        <p>One of our favorite nights ever.</p>
+        <div class="btn-group">
+            <button class="btn" onclick="showCard(9)">Pondicherry</button>
+            <button class="btn" onclick="wrong(this)">Chennai</button>
+        </div>
+        <div class="error-msg">Nope! It was much more peaceful than that.</div>
+    </div>
+
+    <div class="card" id="c9">
+        <h1>The Final Step</h1>
+        <p>The data is conclusive. You are the one. Will you be my Valentine?</p>
+        <div class="btn-group">
+            <button class="btn" style="background: var(--accent); color: black; font-weight: bold;" onclick="showCard('final')">YES, ALWAYS</button>
+        </div>
+    </div>
+
+    <div class="card" id="c-final">
+        <div class="heart-icon">❤️</div>
+        <h1>The Deal is Sealed</h1>
+        <p>I love you more than words can describe. Check your messages for your surprise!</p>
+        <div class="btn-group" style="font-size: 0.8rem; opacity: 0.8;">
+            <p>&copy; 2026 Rohan Koushik Gajulapale. <br> Made with love for my Valentine ❤️</p>
+        </div>
+    </div>
+
+    <div class="progress-dots" id="dot-bar">
+        <div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    </div>
+</div>
+
+<script>
+    const colors = [['#1a0a0a', '#3d0a14'], ['#1e0a2e', '#3b0a2e'], ['#0a1a1a', '#0a2e2e'], ['#2e0a0a', '#5c0a0a']];
+
+    function showCard(id) {
+        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+        document.body.style.setProperty('--bg1', randomColor[0]);
+        document.body.style.setProperty('--bg2', randomColor[1]);
+
+        document.querySelectorAll('.card').forEach(card => card.classList.remove('active'));
+        const nextId = (id === 'final') ? 'c-final' : 'c' + id;
+        const nextCard = document.getElementById(nextId);
+        nextCard.classList.add('active');
+
+        const error = nextCard.querySelector('.error-msg');
+        if(error) error.style.display = 'none';
+
+        const dots = document.querySelectorAll('.dot');
+        const currentIndex = (id === 'final') ? 8 : id - 1;
+        dots.forEach((dot, i) => {
+            if (i <= currentIndex) dot.classList.add('active');
+            else dot.classList.remove('active');
+        });
+
+        if(id === 'final') document.getElementById('dot-bar').style.display = 'none';
+    }
+
+    function wrong(btn) {
+        const card = btn.closest('.card');
+        const error = card.querySelector('.error-msg');
+        btn.classList.add('shake');
+        if(error) error.style.display = 'block';
+        setTimeout(() => { btn.classList.remove('shake'); }, 400);
+    }
+
+    const particlesContainer = document.getElementById('particles');
+    for (let i = 0; i < 40; i++) {
+        const p = document.createElement('div');
+        p.style.cssText = `position: absolute; width: ${Math.random() * 3}px; height: ${Math.random() * 3}px; background: rgba(212, 175, 55, 0.4); top: ${Math.random() * 100}%; left: ${Math.random() * 100}%; border-radius: 50%; animation: float ${5 + Math.random() * 10}s linear infinite;`;
+        particlesContainer.appendChild(p);
+    }
+    const style = document.createElement('style');
+    style.innerHTML = `@keyframes float { 0% { transform: translateY(100vh); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateY(-10vh); opacity: 0; } }`;
+    document.head.appendChild(style);
+</script>
+
+</body>
+</html>
