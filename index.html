@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RohanVerse</title>
+    <style>
+        :root {
+            --accent: #00f2ff;
+            --accent-glow: rgba(0, 242, 255, 0.4);
+            --bg-deep: #020202;
+            --glass: rgba(15, 15, 15, 0.7);
+            --border: rgba(255, 255, 255, 0.08);
+            --text-dim: #a0a0a0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: var(--bg-deep);
+            color: white;
+            font-family: 'Inter', -apple-system, sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* High-End Mesh Background */
+        .mesh-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 80% 20%, #1a0b2e 0%, transparent 40%),
+                radial-gradient(circle at 20% 80%, #0a1a1a 0%, transparent 40%);
+            z-index: -2;
+        }
+
+        /* Mouse Follow Glow (Radium Feel) */
+        #cursor-glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(112, 0, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            transition: opacity 0.3s;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 6%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-symbol {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent), #7000ff);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            animation: pulse 3s infinite;
+        }
+
+        .logo-text {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .user-tag {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 500;
+        }
+
+        /* Search Engine - Professional Style */
+        .hero {
+            text-align: center;
+            padding: 80px 5% 40px;
+        }
+
+        .search-wrapper {
+            max-width: 650px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            padding: 22px 30px;
+            border-radius: 20px;
+            color: white;
+            font-size: 1.1rem;
+            transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            outline: none;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .search-input:focus {
+            border-color: var(--accent);
+            transform: scale(1.02);
+            box-shadow: 0 0 30px var(--accent-glow);
+        }
+
+        .gpt-pill {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            color: var(--accent);
+            font-weight: 700;
+            border: 1px solid var(--accent-glow);
+        }
+
+        /* Bento Grid (LTM Inspired) */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-rows: 200px;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 5%;
+            flex-grow: 1;
+        }
+
+        .bento-item {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: 0.4s;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+        }
+
+        .bento-item:hover {
+            border-color: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-5px);
+        }
+
+        /* Layout Variations */
+        .wide { grid-column: span 2; }
+        .tall { grid-row: span 2; }
+
+        .bento-item h3 { font-size: 1.5rem; margin-bottom: 10px; z-index: 1; position: relative;}
+        .bento-item p { color: var(--text-dim); font-size: 0.9rem; z-index: 1; position: relative;}
+        
+        /* Kinetic Radium Line */
+        .bento-item::after {
+            content: "";
+            position: absolute;
+            bottom: 0; left: 0; width: 0; height: 2px;
+            background: var(--accent);
+            transition: 0.4s;
+        }
+        .bento-item:hover::after { width: 100%; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; filter: drop-shadow(0 0 5px var(--accent)); }
+            50% { opacity: 0.8; filter: drop-shadow(0 0 15px var(--accent)); }
+        }
+
+        /* --- FOOTER SECTION --- */
+        footer {
+            padding: 40px 6%;
+            margin-top: 60px;
+            border-top: 1px solid var(--border);
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-left {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .copyright {
+            font-size: 0.75rem;
+            color: #555;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 900px) {
+            .bento-grid { grid-template-columns: repeat(2, 1fr); }
+            .wide { grid-column: span 2; }
+            footer { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!--<div id="cursor-glow"></div>-->
+    <div class="mesh-bg"></div>
+
+    <header>
+            <div class="logo-container">
+    <a href="https://rohankoushikrv.github.io/RohanVerse/" style="text-decoration: none; display: flex; align-items: center; gap: 12px; color: inherit;">
+        <div class="logo-symbol"></div>
+        <span class="logo-text">RohanVerse</span>
+    </a>
+</div>
+        <div class="user-tag">ROHAN KOUSHIK GAJULAPALLE</div>
+    </header>
+
+    <main>
+       <!--<section class="hero">
+            <div class="search-wrapper">
+                <input type="text" class="search-input" placeholder="Initiate RohanGPT Query...">
+                <span class="gpt-pill">AGI ENGINE</span>
+            </div>
+        </section>-->
+
+        <section class="bento-grid">
+            <a href="https://rohankoushikrv.github.io/RohanGPT/" target="_blank" class="bento-item wide">
+                <h3>RohanGPT</h3>
+            </a>
+           <a href="https://rohankoushikrv.github.io/RohanVerse/rohan-profile.html" target="_blank" class="bento-item tall" style="background: linear-gradient(to bottom, var(--glass), rgba(112, 0, 255, 0.1));">
+                <h3>About Me</h3>
+            </a>
+            <a href="https://github.com/rohankoushikrv" target="_blank" class="bento-item">
+                <h3>My Github Profile</h3>
+                <p>Experimental builds.</p>
+            </a>
+            <a href="https://rohankoushikrv.github.io/RohanVerse/RohanQRStudio.html" target="_blank" class="bento-item">
+                <h3>Rohan OR Generator</h3>
+            </a>
+            <a href="https://rohankoushikrv.github.io/Dr-Satvika_DermaPSite/" target="_blank" class="bento-item wide">
+                <h3>Dr. Satvika Dermatology Personal Blog</h3>
+            </a>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-left">
+            <div class="logo-text" style="font-size: 1rem;">RohanVerse</div>
+            <div class="copyright">© 2026 RohanGPT · Powered by Gemini · Designed & Crafted by Rohan Koushik Gajulapalle. All Rights Received.</div>
+        </div>
+        <div class="footer-links">
+        <a href="https://www.linkedin.com/in/koushik-gajulapalle-51b314134/" target="_blank" class="hover:text-red-400">LinkedIn</a>
+        <a href="https://github.com/rohankoushikrv" target="_blank" class="hover:text-red-400">GitHub</a>
+        <a href="https://www.instagram.com/rohankoushik_grk/profilecard/?igsh=MTZ6NGw3czZ2OG0x" target="_blank" class="hover:text-red-400">Instagram</a>
+        <a href="mailto:koushik.gajulapalle1122@gmail.com" class="hover:text-red-400">Email</a>
+        </div>
+    </footer>
+
+    <script>
+        // Kinetic Mouse Glow
+        const glow = document.getElementById('cursor-glow');
+        document.addEventListener('mousemove', (e) => {
+            glow.style.left = e.clientX + 'px';
+            glow.style.top = e.clientY + 'px';
+        });
+
+        // Search Focus Effect
+        const searchInput = document.querySelector('.search-input');
+        searchInput.addEventListener('focus', () => {
+            glow.style.background = 'radial-gradient(circle, rgba(0, 242, 255, 0.15) 0%, transparent 70%)';
+        });
+        searchInput.addEventListener('blur', () => {
+            glow.style.background = 'radial-gradient(circle, rgba(112, 0, 255, 0.1) 0%, transparent 70%)';
+        });
+    </script>
+</body>
+</html>
